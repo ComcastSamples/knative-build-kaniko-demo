@@ -1,0 +1,24 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: knative-build-kaniko-demo
+  namespace: knative-build-kaniko-domain
+spec:
+  runLatest:
+    configuration:
+      build:
+        serviceAccountName: sa-build-bot
+        source:
+          git:
+            url: https://github.com/danupo068/knative-build-kaniko-demo.git
+            revision: master
+        template:
+          name: kaniko
+          arguments:
+          - name: IMAGE
+            value: docker.io/danupo068/knative-build-kaniko-demo:latest
+      revisionTemplate:
+        spec:
+          container:
+            image: docker.io/danupo068/knative-build-kaniko-demo:latest
+            imagePullPolicy: Always
